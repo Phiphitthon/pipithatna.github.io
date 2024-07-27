@@ -9,12 +9,13 @@
 
 <body>
 
-    <div class="flex flex-col gap-4">
-        <h1 id="name" class="font-semibold text-4xl" data-id=""></h1>
-        <div>Height: <span id="height"></span></div>
-        <div>Weight: <span id="weight"></span></div>
-        <div><img id="sprite" src="" alt="Pokemon Sprite"></div>
-    </div>
+    <h1 id="name" data-id=""></h1>
+    <img id="sprite" src="" alt="Pokemon Sprite" />
+    <div>Height: <span id="height"></span></div>
+    <div>Weight: <span id="weight"></span></div>
+    <div>Types: <span id="types"></span></div>
+    <div>Abilities: <span id="abilities"></span></div>
+    <div id="stats"></div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -24,6 +25,25 @@
             const id = data.id;
             const height = data.height;
             const weight = data.weight;
+            const types = data.types
+                .map((typeInfo) => {
+                    const typeName = typeInfo.type.name;
+                    return `<a href="type.html?type=${typeName}">${typeName}</a>`;
+                })
+                .join(" ");
+            const abilities = data.abilities
+                .map((abilityInfo) => {
+                    const abilityName = abilityInfo.ability.name;
+                    return `<a href="ability.html?ability=${abilityName}">${abilityName}</a>`;
+                })
+                .join(" ");
+            const stats = data.stats
+                .map((statInfo) => {
+                    const statName = statInfo.stat.name;
+                    const statValue = statInfo.base_stat;
+                    return `<div>${statName}: ${statValue}</div>`;
+                })
+                .join("");
             const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
             document.getElementById("sprite").src = spriteUrl;
@@ -34,6 +54,9 @@
 
             document.getElementById("height").innerText = `${height / 10} meters`; // height in meters
             document.getElementById("weight").innerText = `${weight / 10} kg`; // weight in kilograms
+            document.getElementById("types").innerHTML = types;
+            document.getElementById("abilities").innerHTML = abilities;
+            document.getElementById("stats").innerHTML = stats;
         }
 
         if (name) {
