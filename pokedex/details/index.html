@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Info</title>
+</head>
+
+<body>
+
+    <div class="flex flex-col gap-4">
+        <h1 id="name" class="font-semibold text-4xl" data-id=""></h1>
+        <div>Height: <span id="height"></span></div>
+        <div>Weight: <span id="weight"></span></div>
+        <div><img id="sprite" src="" alt="Pokemon Sprite"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get("name");
+
+        function updatePokemonInfo(data) {
+            const id = data.id;
+            const height = data.height;
+            const weight = data.weight;
+            const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
+            document.getElementById("sprite").src = spriteUrl;
+
+            const nameElement = document.getElementById("name");
+            nameElement.innerText = data.name;
+            nameElement.dataset.id = id;
+
+            document.getElementById("height").innerText = `${height / 10} meters`; // height in meters
+            document.getElementById("weight").innerText = `${weight / 10} kg`; // weight in kilograms
+        }
+
+        if (name) {
+            fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`)
+                .then(res => res.json())
+                .then(data => updatePokemonInfo(data))
+                .catch(err => console.error("Error fetching Pokémon data:", err));
+        } else {
+            document.getElementById("name").innerText = "No Pokémon name provided in query parameter.";
+        }
+    </script>
+</body>
+
+</html>
