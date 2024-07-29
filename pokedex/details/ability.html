@@ -43,7 +43,7 @@
                         <div><img src='${spriteUrl}' class='card-img-top' alt='Not Found'></div>
                         <div class='card-body'>
                         <div>${pokemonName}</div>
-                        <div><a href='info.html?name=${pokemonName}'>more info</a>
+                        <div><a href='info.html?name=${pokemonName}' class='btn btn-primary'>more info</a>
             `;
                         })
                         .catch((err) => console.error("Error fetching Pokémon data:", err));
